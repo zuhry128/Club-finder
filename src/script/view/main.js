@@ -1,19 +1,19 @@
-const main = function () {
+import DataSource from '../data/data-source.js';
+const main = () => {
     const searchElement = document.querySelector("#searchElement");
     const buttonSearchElement = document.querySelector("#searchButtonElement");
     const clubListElement = document.querySelector("#clubList");
 
-    const onButtonSearchClicked = function () {
-        const dataSource = new DataSource(renderResult, fallbackResult);
-        dataSource.searchClub(searchElement.value);
+    const onButtonSearchClicked = () => {
+        DataSource.searchClub(searchElement.value)
+            .then(renderResult)
+            .catch(fallbackResult)
     };
 
-    const renderResult = function (results) {
+    const renderResult = results => {
         clubListElement.innerHTML = "";
         results.forEach(function (club) {
-            const name = club.name;
-            const fanArt = club.fanArt;
-            const description = club.description;
+            const {name, fanArt, description} = club;
 
             const clubElement = document.createElement("div");
             clubElement.setAttribute("class", "club");
@@ -28,10 +28,11 @@ const main = function () {
         })
     };
 
-    const fallbackResult = function (message) {
+    const fallbackResult = (message) => {
         clubListElement.innerHTML = "";
         clubListElement.innerHTML += `<h2 class="placeholder">${message}</h2>`
     };
 
     buttonSearchElement.addEventListener("click", onButtonSearchClicked);
 };
+export default main;
